@@ -1,0 +1,71 @@
+# Python virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Environment variables and secrets
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+firebase_admin.json
+
+# Next.js frontend
+/bitgenius-front/.next/
+/bitgenius-front/out/
+/bitgenius-front/node_modules/
+/bitgenius-front/.turbo
+/bitgenius-front/build
+/bitgenius-front/.swc/
+/bitgenius-front/coverage/
+/bitgenius-front/.vercel
+/bitgenius-front/next-env.d.ts
+
+# Smart contracts
+/contracts/node_modules/
+/contracts/.cache/
+/contracts/coverage/
+/contracts/.clarinet/
+/contracts/history.txt
+/contracts/settings/Wallet*.toml
+/contracts/.coverage
+
+# IDE and editors
+.idea/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/settings.json
+!.vscode/extensions.json
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*~
+.#*
+
+# Build artifacts and logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+logs/
+*.backup
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+htmlcov/
+.tox/
+dist/
+tmp/
+contracts/deployments/

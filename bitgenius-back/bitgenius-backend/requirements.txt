@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+python-dotenv
+pydantic
+
+firebase-admin
+
+requests
+httpx
+
+google-generativeai
+
+python-multipart
+python-jose
