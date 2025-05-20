@@ -11,6 +11,58 @@ from models.log import LogEntry, PerformanceMetrics, Transaction
 
 router = APIRouter()
 
+@router.get("/", response_model=Dict)
+async def get_all_logs(limit: int = Query(50, ge=1, le=200)):
+    """Get all logs across all agents"""
+    try:
+        logs = firestore_client.get_all_logs(limit)
+        return {"logs": logs}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching all logs: {str(e)}")
+
+@router.post("/", response_model=Dict)
+async def create_log_entry(log_data: Dict):
+    """Create a new log entry"""
+    try:
+        # Extract data from request
+        agent_id = log_data.get("agent_id")
+        action = log_data.get("action")
+        status = log_data.get("status")
+        details = log_data.get("details")
+        
+        # Optional fields
+        tx_id = log_data.get("transaction_id")
+        amount = log_data.get("amount")
+        fee = log_data.get("fee")
+        
+        # Validate required fields
+        if not all([agent_id, action, status, details]):
+            raise HTTPException(status_code=400, detail="Missing required fields")
+        
+        # Save to Firebase for immediate access
+        log_id = firestore_client.add_log(log_data)
+        
+        # Prepare on-chain transaction (if needed)
+        sender = log_data.get("sender", "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM")
+        tx_payload = maestro_client.prepare_log_agent_action_tx(log_data, sender)
+        
+        return {
+            "log_id": log_id,
+            "transaction_payload": tx_payload,
+            "message": "Log entry created successfully"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating log entry: {str(e)}")
+
+@router.get("/agent/{agent_id}", response_model=Dict)
+async def get_logs_by_agent(agent_id: int, limit: int = Query(20, ge=1, le=100)):
+    """Get logs for a specific agent"""
+    try:
+        logs = firestore_client.get_agent_logs(agent_id, limit)
+        return {"logs": logs}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching logs for agent {agent_id}: {str(e)}")
+
 @router.get("/live/{agent_id}")
 async def get_live_logs(agent_id: int, limit: int = Query(10, ge=1, le=100)):
     """Get the latest logs for an agent"""

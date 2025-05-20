@@ -9,6 +9,48 @@ from models.log import Notification
 
 router = APIRouter()
 
+@router.get("/summary", response_model=Dict)
+async def get_dashboard_summary():
+    """Get summary data for the dashboard"""
+    try:
+        # Get the number of agents
+        agent_count = maestro_client.get_agent_count()
+        
+        # Get BTC price
+        btc_price = btc_client.get_btc_price()
+        
+        return {
+            "agent_count": agent_count,
+            "btc_price": btc_price,
+            "active_agents": agent_count // 2,  # Placeholder logic
+            "latest_performance": 5.2  # Placeholder value
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching dashboard summary: {str(e)}")
+
+@router.get("/market", response_model=Dict)
+async def get_market_data():
+    """Get market data for the dashboard"""
+    try:
+        btc_price = btc_client.get_btc_price()
+        
+        # Placeholder market data
+        return {
+            "btc_price": btc_price,
+            "price_change_24h": 1.2,
+            "volume_24h": 28765430000,
+            "market_cap": 864532100000,
+            "chart_data": [
+                {"timestamp": 1656043200, "price": 20100},
+                {"timestamp": 1656046800, "price": 20200},
+                {"timestamp": 1656050400, "price": 20150},
+                {"timestamp": 1656054000, "price": 20300},
+                {"timestamp": 1656057600, "price": 20250}
+            ]
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching market data: {str(e)}")
+
 @router.get("/overview/{principal}", response_model=AgentOverview)
 async def get_dashboard_overview(principal: str):
     """Get overview data for the dashboard"""

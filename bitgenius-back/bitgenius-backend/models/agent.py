@@ -14,7 +14,11 @@ class AgentCreate(BaseModel):
     trigger_condition: str = Field(..., min_length=1, max_length=100)
     privacy_enabled: bool = False
     allocation: int = Field(..., gt=0)
-    sender: str = Field(..., min_length=1)
+    sender: Optional[str] = "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM"
+
+    class Config:
+        validate_assignment = True
+        extra = "ignore"
 
 class Agent(BaseModel):
     agent_id: int

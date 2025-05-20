@@ -69,3 +69,5 @@ htmlcov/
 dist/
 tmp/
 contracts/deployments/
+
+node_modules/
